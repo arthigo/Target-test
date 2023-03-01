@@ -12,6 +12,8 @@ b) Podem existir dias sem faturamento, como nos finais de semana e feriados. Est
 import { faturamento} from './data/faturamento.js'
 
 const min = faturamento.reduce((prev, curr) => {
+    if(curr.valor == 0)
+        return prev;
     return curr.valor < prev ? curr.valor : prev;
 }, Infinity);
 
@@ -19,11 +21,18 @@ const max = faturamento.reduce((prev, curr) =>{
     return curr.valor > prev ? curr.valor : prev;
 }, 0);
 
-const total = faturamento.reduce((total, curr) => {
+const total = faturamento.reduce((total, curr) => {    
     return total + curr.valor;
 }, 0);
 
-const average = total / faturamento.length;
+
+let daysNonZero = 0;
+faturamento.forEach(item => {
+    if(item.valor > 0)
+        daysNonZero++;
+})
+
+const average = total / daysNonZero;
 
 let count = 0;
 faturamento.forEach(item => {
